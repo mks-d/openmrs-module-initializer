@@ -7,41 +7,34 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-package org.openmrs.module.initializer;
+package org.openmrs.module.initializer.api.c;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openmrs.Concept;
 import org.openmrs.ConceptClass;
-import org.openmrs.ConceptDatatype;
-import org.openmrs.ConceptDescription;
-import org.openmrs.ConceptMap;
 import org.openmrs.ConceptMapType;
-import org.openmrs.ConceptName;
-import org.openmrs.ConceptReferenceTerm;
-import org.openmrs.ConceptSource;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.initializer.api.CsvHeaders;
+import org.openmrs.module.initializer.api.c.ConceptSerializer;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
-public class FlattenerTest extends BaseModuleContextSensitiveTest {
+public class ConceptSerializerTest extends BaseModuleContextSensitiveTest {
 	
 	public class ConceptClassSerializer extends StdSerializer<ConceptClass> {
 		
@@ -82,49 +75,41 @@ public class FlattenerTest extends BaseModuleContextSensitiveTest {
 		
 	}
 	
-	public abstract class IgnoreCreatorMixIn {
+	public abstract class _IgnoreCreator {
 		
 		@JsonIgnore
 		abstract User getCreator();
 	}
 	
-	public abstract class IgnoreConceptMixIn extends IgnoreCreatorMixIn {
+	public abstract class _IgnoreConcept extends _IgnoreCreator {
 		
 		@JsonIgnore
 		abstract Concept getConcept();
 	}
 	
-	public abstract class ConceptMixIn extends IgnoreCreatorMixIn {
+	public abstract class _Concept extends _IgnoreCreator {
 		
 		@JsonIgnore
 		abstract List<Concept> getPossibleValues();
 	}
 	
-	public abstract class ConceptMapMixIn extends IgnoreConceptMixIn {
+	public abstract class _ConceptMap extends _IgnoreConcept {
 		
 		@JsonIgnore
 		abstract ConceptMapType getConceptMapType();
 	}
+	
+	@Autowired
+	private CsvHeaders csvHeaders;
 	
 	@Test
 	public void should_2() {
 		
 		Concept c = Context.getConceptService().getConcept(16);
 		
-		ObjectMapper mapper = new ObjectMapper();
-		mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+		ConceptSerializer szr = new ConceptSerializer();
 		
-		mapper.addMixIn(ConceptDatatype.class, IgnoreCreatorMixIn.class);
-		mapper.addMixIn(ConceptClass.class, IgnoreCreatorMixIn.class);
-		mapper.addMixIn(ConceptReferenceTerm.class, IgnoreCreatorMixIn.class);
-		mapper.addMixIn(ConceptSource.class, IgnoreCreatorMixIn.class);
-		mapper.addMixIn(ConceptMap.class, ConceptMapMixIn.class);
-		mapper.addMixIn(ConceptName.class, IgnoreConceptMixIn.class);
-		mapper.addMixIn(ConceptDescription.class, IgnoreConceptMixIn.class);
-		mapper.addMixIn(Concept.class, ConceptMixIn.class);
-		
-		// Convert POJO to Map
-		Map<String, Object> map = mapper.convertValue(c, new TypeReference<Map<String, Object>>() {});
+		szr.toMap(c);
 		
 		"".toString();
 		

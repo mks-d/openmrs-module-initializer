@@ -11,7 +11,9 @@ import org.openmrs.ConceptDatatype;
 import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptName;
 import org.openmrs.api.ConceptService;
+import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
+import org.openmrs.module.initializer.api.CsvHeaders;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -36,8 +38,9 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 	protected ConceptService conceptService;
 	
 	@Autowired
-	public ConceptLineProcessor(@Qualifier("conceptService") ConceptService conceptService) {
+	public ConceptLineProcessor(@Qualifier("conceptService") ConceptService conceptService, CsvHeaders csvHeaders) {
 		this.conceptService = conceptService;
+		csvHeaders.registerHeaders(Domain.CONCEPTS, getClass(), ConceptSerializer.membersMapper);
 	}
 	
 	/*

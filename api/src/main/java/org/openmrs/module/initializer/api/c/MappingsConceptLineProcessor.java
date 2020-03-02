@@ -5,6 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.ConceptMap;
 import org.openmrs.api.ConceptService;
+import org.openmrs.module.initializer.Domain;
+import org.openmrs.module.initializer.api.CsvHeaders;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.utils.ConceptMapListParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +16,15 @@ import org.springframework.stereotype.Component;
 @Component("initializer.mappingsConceptLineProcessor")
 public class MappingsConceptLineProcessor extends ConceptLineProcessor {
 	
-	protected static String HEADER_MAPPINGS_SAMEAS = "same as mappings";
+	final public static String HEADER_MAPPINGS_SAMEAS = "same as mappings";
 	
 	private ConceptMapListParser listParser;
 	
 	@Autowired
 	public MappingsConceptLineProcessor(@Qualifier("conceptService") ConceptService conceptService,
-	    ConceptMapListParser listParser) {
-		super(conceptService);
+	    ConceptMapListParser listParser, CsvHeaders headers) {
+		super(conceptService, headers);
+		headers.registerHeaders(Domain.CONCEPTS, getClass());
 		this.listParser = listParser;
 	}
 	

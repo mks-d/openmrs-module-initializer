@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openmrs.Concept;
 import org.openmrs.api.ConceptService;
+import org.openmrs.module.initializer.api.CsvHeaders;
 import org.openmrs.module.initializer.api.CsvLine;
 
 /*
@@ -24,7 +25,7 @@ public class BaseConceptLineProcessorTest {
 		String[] line = {};
 		
 		// Replay
-		ConceptLineProcessor p = new ConceptLineProcessor(cs);
+		ConceptLineProcessor p = new ConceptLineProcessor(cs, new CsvHeaders());
 		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
 		
 		// Verif

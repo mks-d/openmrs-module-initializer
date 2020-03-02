@@ -17,6 +17,7 @@ import org.mockito.stubbing.Answer;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.api.ConceptService;
+import org.openmrs.module.initializer.api.CsvHeaders;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.utils.ConceptListParser;
 
@@ -54,9 +55,10 @@ public class NestedConceptLineProcessorTest {
 		// Setup
 		String[] headerLine = { "Answers", "Members" };
 		String[] line = { "cambodia:123; cambodia:456", null };
+		CsvHeaders h = new CsvHeaders();
 		
 		// Replay
-		NestedConceptLineProcessor p = new NestedConceptLineProcessor(cs, new ConceptListParser(cs));
+		NestedConceptLineProcessor p = new NestedConceptLineProcessor(cs, new ConceptListParser(cs), h);
 		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
 		
 		// Verif
@@ -77,9 +79,10 @@ public class NestedConceptLineProcessorTest {
 		// Setup
 		String[] headerLine = { "Answers", "Members" };
 		String[] line = { null, "cambodia:123; cambodia:456" };
+		CsvHeaders h = new CsvHeaders();
 		
 		// Replay
-		NestedConceptLineProcessor p = new NestedConceptLineProcessor(cs, new ConceptListParser(cs));
+		NestedConceptLineProcessor p = new NestedConceptLineProcessor(cs, new ConceptListParser(cs), h);
 		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
 		
 		// Verif
@@ -100,9 +103,10 @@ public class NestedConceptLineProcessorTest {
 		// Setup
 		String[] headerLine = { "Answers", "Members" };
 		String[] line = { null, null };
+		CsvHeaders h = new CsvHeaders();
 		
 		// Replay
-		NestedConceptLineProcessor p = new NestedConceptLineProcessor(cs, new ConceptListParser(cs));
+		NestedConceptLineProcessor p = new NestedConceptLineProcessor(cs, new ConceptListParser(cs), h);
 		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
 		
 		// Verif
@@ -116,9 +120,10 @@ public class NestedConceptLineProcessorTest {
 		// Setup
 		String[] headerLine = {};
 		String[] line = {};
+		CsvHeaders h = new CsvHeaders();
 		
 		// Replay
-		NestedConceptLineProcessor p = new NestedConceptLineProcessor(cs, new ConceptListParser(cs));
+		NestedConceptLineProcessor p = new NestedConceptLineProcessor(cs, new ConceptListParser(cs), h);
 		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
 		Assert.assertNull(c.getAnswers());
 		Assert.assertNull(c.getSetMembers());

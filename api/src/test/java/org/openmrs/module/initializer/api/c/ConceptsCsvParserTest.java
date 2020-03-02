@@ -19,6 +19,7 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptClass;
 import org.openmrs.ConceptDatatype;
 import org.openmrs.api.ConceptService;
+import org.openmrs.module.initializer.api.CsvHeaders;
 import org.openmrs.module.initializer.api.utils.ConceptListParser;
 import org.openmrs.module.initializer.api.utils.ConceptMapListParser;
 
@@ -77,12 +78,13 @@ public class ConceptsCsvParserTest {
 		// setup
 		InputStream is = getClass().getClassLoader()
 		        .getResourceAsStream("testAppDataDir/configuration/concepts/concepts_base.csv");
+		CsvHeaders h = new CsvHeaders();
 		
 		// replay
-		ConceptsCsvParser parser = new ConceptsCsvParser(cs, new ConceptLineProcessor(cs),
-		        new ConceptNumericLineProcessor(cs), new ConceptComplexLineProcessor(cs),
-		        new NestedConceptLineProcessor(cs, new ConceptListParser(cs)),
-		        new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs)));
+		ConceptsCsvParser parser = new ConceptsCsvParser(cs, new ConceptLineProcessor(cs, h),
+		        new ConceptNumericLineProcessor(cs, h), new ConceptComplexLineProcessor(cs, h),
+		        new NestedConceptLineProcessor(cs, new ConceptListParser(cs), h),
+		        new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs), h));
 		parser.setInputStream(is);
 		
 		List<String[]> lines = parser.process(parser.getLines());
@@ -93,10 +95,12 @@ public class ConceptsCsvParserTest {
 	
 	@Test
 	public void process_shouldFailOnMisformattedCsv() throws IOException {
-		ConceptsCsvParser parser = new ConceptsCsvParser(cs, new ConceptLineProcessor(cs),
-		        new ConceptNumericLineProcessor(cs), new ConceptComplexLineProcessor(cs),
-		        new NestedConceptLineProcessor(cs, new ConceptListParser(cs)),
-		        new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs)));
+		CsvHeaders h = new CsvHeaders();
+		
+		ConceptsCsvParser parser = new ConceptsCsvParser(cs, new ConceptLineProcessor(cs, h),
+		        new ConceptNumericLineProcessor(cs, h), new ConceptComplexLineProcessor(cs, h),
+		        new NestedConceptLineProcessor(cs, new ConceptListParser(cs), h),
+		        new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs), h));
 		InputStream is = null;
 		
 		is = getClass().getClassLoader()

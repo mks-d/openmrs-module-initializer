@@ -19,6 +19,7 @@ import org.openmrs.ConceptMap;
 import org.openmrs.ConceptMapType;
 import org.openmrs.ConceptSource;
 import org.openmrs.api.ConceptService;
+import org.openmrs.module.initializer.api.CsvHeaders;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.utils.ConceptMapListParser;
 
@@ -70,9 +71,10 @@ public class MappingsConceptLineProcessorTest {
 		// Setup
 		String[] headerLine = { "Same as mappings" };
 		String[] line = { "cambodia:123; foo:456" };
+		CsvHeaders h = new CsvHeaders();
 		
 		// Replay
-		MappingsConceptLineProcessor p = new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs));
+		MappingsConceptLineProcessor p = new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs), h);
 		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
 		
 		// Verif
@@ -94,9 +96,10 @@ public class MappingsConceptLineProcessorTest {
 		// Setup
 		String[] headerLine = { "Same as mappings" };
 		String[] line = { null };
+		CsvHeaders h = new CsvHeaders();
 		
 		// Replay
-		MappingsConceptLineProcessor p = new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs));
+		MappingsConceptLineProcessor p = new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs), h);
 		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
 		
 		// Verif
@@ -108,9 +111,10 @@ public class MappingsConceptLineProcessorTest {
 		// Setup
 		String[] headerLine = {};
 		String[] line = {};
+		CsvHeaders h = new CsvHeaders();
 		
 		// Replay
-		MappingsConceptLineProcessor p = new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs));
+		MappingsConceptLineProcessor p = new MappingsConceptLineProcessor(cs, new ConceptMapListParser(cs), h);
 		Concept c = p.fill(new Concept(), new CsvLine(headerLine, line));
 		Assert.assertNull(c.getConceptMappings());
 	}
