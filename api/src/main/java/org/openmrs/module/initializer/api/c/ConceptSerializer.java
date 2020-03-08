@@ -1,13 +1,7 @@
 package org.openmrs.module.initializer.api.c;
 
-import java.lang.reflect.Field;
-import java.util.AbstractMap;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
 
 import org.openmrs.Concept;
 import org.openmrs.ConceptClass;
@@ -50,10 +44,6 @@ public class ConceptSerializer {
 		@JsonIgnore
 		abstract ConceptMapType getConceptMapType();
 	}
-	
-	final public static Function<Field, ? super SimpleEntry<Field, Set<String>>> membersMapper = field -> {
-		return new AbstractMap.SimpleEntry<>(field, Collections.emptySet());
-	};
 	
 	public Map<String, Object> toMap(Concept concept) {
 		

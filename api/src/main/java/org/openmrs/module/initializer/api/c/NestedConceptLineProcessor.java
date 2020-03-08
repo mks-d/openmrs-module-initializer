@@ -4,7 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.ConceptAnswer;
 import org.openmrs.api.ConceptService;
-import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.CsvHeaders;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.openmrs.module.initializer.api.utils.ConceptListParser;
@@ -26,7 +25,6 @@ public class NestedConceptLineProcessor extends ConceptLineProcessor {
 	public NestedConceptLineProcessor(@Qualifier("conceptService") ConceptService conceptService,
 	    ConceptListParser listParser, CsvHeaders headers) {
 		super(conceptService, headers);
-		headers.registerHeaders(Domain.CONCEPTS, getClass());
 		this.listParser = listParser;
 	}
 	

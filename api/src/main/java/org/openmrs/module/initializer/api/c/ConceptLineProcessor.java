@@ -1,5 +1,6 @@
 package org.openmrs.module.initializer.api.c;
 
+import static org.openmrs.module.initializer.Domain.CONCEPTS;
 import static org.openmrs.module.initializer.api.c.LocalizedHeader.getLocalizedHeader;
 
 import java.util.Locale;
@@ -11,10 +12,11 @@ import org.openmrs.ConceptDatatype;
 import org.openmrs.ConceptDescription;
 import org.openmrs.ConceptName;
 import org.openmrs.api.ConceptService;
-import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.BaseLineProcessor;
 import org.openmrs.module.initializer.api.CsvHeaders;
 import org.openmrs.module.initializer.api.CsvLine;
+import org.openmrs.module.initializer.api.annotations.CsvSerialized;
+import org.openmrs.module.initializer.api.annotations.LineProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -25,14 +27,18 @@ import org.springframework.util.CollectionUtils;
  * the minimal set of required fields.
  */
 @Component("initializer.conceptLineProcessor")
+@LineProcessor(CONCEPTS)
 public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 	
+	@CsvSerialized(entityMember = "names", strategy = ConceptShortNames.class)
 	final public static String HEADER_SHORTNAME = "short name";
 	
 	final public static String HEADER_FSNAME = "fully specified name";
 	
+	//	@CsvSerialized(entityMember="conceptClass", strategy=SingleMetadata.class)
 	final public static String HEADER_CLASS = "data class";
 	
+	//	@CsvSerialized(entityMember="dataType", strategy=SingleMetadata.class)
 	final public static String HEADER_DATATYPE = "data type";
 	
 	protected ConceptService conceptService;
@@ -40,7 +46,6 @@ public class ConceptLineProcessor extends BaseLineProcessor<Concept> {
 	@Autowired
 	public ConceptLineProcessor(@Qualifier("conceptService") ConceptService conceptService, CsvHeaders csvHeaders) {
 		this.conceptService = conceptService;
-		csvHeaders.registerHeaders(Domain.CONCEPTS, getClass(), ConceptSerializer.membersMapper);
 	}
 	
 	/*

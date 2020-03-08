@@ -3,7 +3,6 @@ package org.openmrs.module.initializer.api.c;
 import org.openmrs.Concept;
 import org.openmrs.ConceptComplex;
 import org.openmrs.api.ConceptService;
-import org.openmrs.module.initializer.Domain;
 import org.openmrs.module.initializer.api.CsvHeaders;
 import org.openmrs.module.initializer.api.CsvLine;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ public class ConceptComplexLineProcessor extends ConceptLineProcessor {
 	@Autowired
 	public ConceptComplexLineProcessor(@Qualifier("conceptService") ConceptService conceptService, CsvHeaders headers) {
 		super(conceptService, headers);
-		headers.registerHeaders(Domain.CONCEPTS, getClass());
 	}
 	
 	public Concept fill(Concept instance, CsvLine line) throws IllegalArgumentException {
